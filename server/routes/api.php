@@ -25,6 +25,6 @@ Route::get('resume/{id}', [ResumeController::class, 'show']);
 
 Route::post('resume', [ResumeController::class, 'store']);
 
-Route::put('resume', [ResumeController::class, 'edit']);
+Route::put('resume', [ResumeController::class, 'store']);
 
 Route::delete('resume/{id}', [ResumeController::class, 'destroy']);
