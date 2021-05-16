@@ -2,7 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
+use App\Models\Education;
+use App\Models\Person;
+use App\Models\WorkExperience;
 use Illuminate\Database\Seeder;
+use Illuminate\Foundation\Auth\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,8 +16,12 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        Person::factory(5)
+            ->has(Education::factory(2))
+            ->has(WorkExperience::factory(2))
+            ->has(Address::factory())
+            ->create();
     }
 }
