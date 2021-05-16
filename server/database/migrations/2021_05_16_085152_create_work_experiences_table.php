@@ -15,7 +15,7 @@ class CreateWorkExperiencesTable extends Migration
     {
         Schema::create('work_experiences', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('person_id');
+            $table->foreignId('resume_id');
             $table->string('title');
             $table->string('company');
             $table->string('location');

@@ -10,8 +10,8 @@ class Address extends Model
 {
     use HasFactory;
 
-    public function person(): BelongsTo
+    public function resume(): BelongsTo
     {
-        return $this->belongsTo(Person::class);
+        return $this->belongsTo(Resume::class);
     }
 }

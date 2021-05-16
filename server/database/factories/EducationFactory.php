@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Education;
-use App\Models\Person;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EducationFactory extends Factory
