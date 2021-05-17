@@ -17,7 +17,6 @@ class CreateAddressesTable extends Migration
             $table->id();
             $table->foreignId('resume_id');
             $table->string('address');
-            $table->string('town_city');
             $table->string('country');
             $table->string('postal_code');
             $table->timestamps();

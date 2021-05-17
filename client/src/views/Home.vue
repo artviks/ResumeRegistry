@@ -1,145 +1,79 @@
 <template>
-  <v-card-text>
-    <v-form>
 
-      <v-container>
+  <v-container>
+    <v-card v-for="resume in resumes" :key="resume.id"
+            class="ma-2"
+            elevation="4"
+    >
 
-        <p>Personal info</p>
-        <v-row>
-          <v-col>
-            <v-text-field label="Full name" v-model="person.name"></v-text-field>
-          </v-col>
-          <v-col>
-            <v-text-field label="Phone" v-model="person.phone"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-text-field label="Email" v-model="person.email"></v-text-field>
-          </v-col>
-          <v-col>
-            <v-text-field label="Link" v-model="person.links"></v-text-field>
-          </v-col>
-        </v-row>
+      <v-card-title>
+        {{ resume.person.name }}
+      </v-card-title>
+      <v-card-subtitle class="d-inline">
+        Education
+      </v-card-subtitle>
+      <v-card-text v-for="education in resume.education" :key="education.id" class="d-inline">
+        {{ education.school }}
+      </v-card-text>
 
-      </v-container>
-
-      <v-container>
-
-        <p>Education</p>
-        <v-row>
-          <v-col>
-            <v-text-field label="School" v-model="education.school"></v-text-field>
-          </v-col>
-          <v-col>
-            <v-text-field label="Faculty" v-model="education.faculty"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-text-field label="Field of study" v-model="education.field"></v-text-field>
-          </v-col>
-          <v-col>
-            <v-text-field label="Degree" v-model="education.degree"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-text-field label="Start Year" v-model="education.startYear"></v-text-field>
-          </v-col>
-          <v-col>
-            <v-text-field label="End Year" v-model="education.endYear"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-textarea label="Description" v-model="education.description"></v-textarea>
-          </v-col>
-        </v-row>
-
-      </v-container>
-
-      <v-container>
-
-        <p>Work Experience</p>
-        <v-row>
-          <v-col>
-            <v-text-field label="Title" v-model="workExperience.title"></v-text-field>
-          </v-col>
-          <v-col>
-            <v-text-field label="Company" v-model="workExperience.company"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-text-field label="Location" v-model="workExperience.location"></v-text-field>
-          </v-col>
-          <v-col>
-            <v-text-field label="Employment schedule" v-model="workExperience.employmentSchedule"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-text-field label="Start Date" v-model="workExperience.startDate"></v-text-field>
-          </v-col>
-          <v-col>
-            <v-text-field label="End Date" v-model="workExperience.endDate"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-textarea label="Description" v-model="workExperience.description"></v-textarea>
-          </v-col>
-        </v-row>
-
-      </v-container>
-
-      <v-container>
-
-        <p>Address</p>
-        <v-row>
-          <v-col>
-            <v-text-field label="Address" v-model="address.address"></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-text-field label="Country" v-model="address.country"></v-text-field>
-          </v-col>
-          <v-col>
-            <v-text-field label="Postal Code" v-model="address.postalCode"></v-text-field>
-          </v-col>
-        </v-row>
-
-      </v-container>
-
-    </v-form>
-  </v-card-text>
+      <v-card-actions>
+        <v-btn
+            @click="$router.push(`edit/${resume.id}`)"
+            elevation="2"
+            color="primary"
+        >
+          Edit
+        </v-btn>
+        <v-btn
+            elevation="2"
+            color="secondary"
+        >
+          View
+        </v-btn>
+        <v-btn
+            elevation="2"
+            color="error"
+        >
+          Delete
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-container>
 
 </template>
 
 <script>
+  import axios from "@/axios";
+
   export default {
     name: 'Home',
     data() {
       return {
-        resume: {},
-        person: {},
-        education: {},
-        workExperience: {},
-        address: {}
+        resumes: [],
+        pagination: {},
       }
     },
 
-    methods: {
-      getResume() {
-        this.resume.person = this.person;
-        this.resume.education = this.education;
-        this.resume.workExperience = this.workExperience;
-        this.resume.address = this.address;
+    created() {
+      this.fetchResumes('resumes')
+    },
 
-        return this.resume;
-      }
+    methods: {
+
+      fetchResumes(url) {
+        axios.get(url).then(({data}) => {
+          this.resumes = data.data;
+          this.makePagination(data.meta, data.links);
+        })
+            .catch(err => console.log(err))
+      },
+
+      makePagination(meta, links) {
+        const {current_page, last_page} = meta;
+        const {prev, next} = links;
+        this.pagination = {current_page, last_page, next, prev};
+      },
+
     }
   }
 </script>
