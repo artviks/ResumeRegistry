@@ -10,6 +10,16 @@ class WorkExperience extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'company',
+        'location',
+        'start_date',
+        'end_date',
+        'employment_schedule',
+        'description'
+    ];
+
     public function resume(): BelongsTo
     {
         return $this->belongsTo(Resume::class);

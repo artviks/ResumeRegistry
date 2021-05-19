@@ -10,6 +10,13 @@ class Person extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'phone_number',
+        'email',
+        'links'
+    ];
+
     public function resume(): BelongsTo
     {
         return $this->belongsTo(Resume::class);

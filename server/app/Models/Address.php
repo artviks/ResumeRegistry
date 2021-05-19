@@ -10,6 +10,12 @@ class Address extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'address',
+        'country',
+        'postal_code'
+    ];
+
     public function resume(): BelongsTo
     {
         return $this->belongsTo(Resume::class);
