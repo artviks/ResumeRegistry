@@ -19,12 +19,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('resumes', [ResumeController::class, 'index']);
+Route::get('resumes', [ResumeController::class, 'index'])->name('resumes');
 
-Route::get('resume/{id}', [ResumeController::class, 'show']);
+Route::get('resume/{id}', [ResumeController::class, 'show'])->name('resume.show');
 
-Route::post('resume', [ResumeController::class, 'store']);
+Route::post('resume', [ResumeController::class, 'store'])->name('resume.store');
 
-Route::put('resume', [ResumeController::class, 'edit']);
+Route::put('resume', [ResumeController::class, 'edit'])->name('resume.edit');
 
-Route::delete('resume/{id}', [ResumeController::class, 'destroy']);
+Route::delete('resume/{id}', [ResumeController::class, 'destroy'])->name('resume.destroy');

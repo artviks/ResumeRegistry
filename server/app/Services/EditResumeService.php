@@ -18,7 +18,15 @@ class EditResumeService
     {
         $resume = Resume::findOrFail($request->id);
 
-        Person::updateOrCreate($request->input('person'));
+        Person::updateOrCreate([
+            'id' => $request->input('person.id')
+        ], [
+            'resume_id' => $resume->id,
+            'name' => $request->input('person.name'),
+            'phone_number' => $request->input('person.phone_number'),
+            'email' => $request->input('person.email'),
+            'links' => $request->input('person.links'),
+        ]);
 
         $this->deleteEdu($request, $resume->id);
 
@@ -56,7 +64,14 @@ class EditResumeService
             ]);
         }
 
-        Address::updateOrCreate($request->input('address'));
+        Address::updateOrCreate([
+            'id' => $request->input('address.id')
+        ], [
+            'resume_id' => $resume->id,
+            'address' => $request->input('address.address'),
+            'country' => $request->input('address.country'),
+            'postal_code' => $request->input('address.postal_code')
+        ]);
 
         $resume->touch();
     }

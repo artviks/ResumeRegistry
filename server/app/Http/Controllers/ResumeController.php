@@ -23,7 +23,7 @@ class ResumeController extends Controller
 
     public function index(): AnonymousResourceCollection
     {
-        $resume = Resume::orderBy('created_at', 'desc')
+        $resume = Resume::orderBy('updated_at', 'desc')
             ->paginate(10);
 
         return ResumeResource::collection($resume);
