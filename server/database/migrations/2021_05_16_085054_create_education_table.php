@@ -17,12 +17,12 @@ class CreateEducationTable extends Migration
             $table->id();
             $table->foreignId('resume_id');
             $table->string('school');
-            $table->string('faculty');
+            $table->string('faculty')->nullable();
             $table->string('field_of_study');
             $table->string('degree');
             $table->integer('start_year');
-            $table->integer('end_year');
-            $table->text('description');
+            $table->integer('end_year')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

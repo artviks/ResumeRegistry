@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreResumeRequest;
 use App\Http\Resources\ResumeResource;
 use App\Models\Address;
 use App\Models\Education;
 use App\Models\Person;
 use App\Models\Resume;
 use App\Models\WorkExperience;
-use Illuminate\Http\Request;
+use App\Services\EditResumeService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class ResumeController extends Controller
 {
+    private EditResumeService $editResumeService;
+
+    public function __construct(EditResumeService $editResumeService)
+    {
+        $this->editResumeService = $editResumeService;
+    }
+
     public function index(): AnonymousResourceCollection
     {
         $resume = Resume::orderBy('created_at', 'desc')
@@ -22,27 +29,33 @@ class ResumeController extends Controller
         return ResumeResource::collection($resume);
     }
 
-    public function store(Request $request): void
+    public function store(StoreResumeRequest $request): void
     {
         $resume = new Resume();
-//        Person::create(
-//            'resume_id'$resume->id
-//            $request->input('person')
-//        );
-        Education::create($request->input('education'));
-        WorkExperience::create($request->input('work_experience'));
-        Address::create($request->input('address'));
+        $resume->save();
+
+        $resume->person()->create($request->input('person'));
+
+        if ($request->input('education')[0]) {
+            foreach ($request->input('education') as $education)
+            {
+                $resume->education()->create($education);
+            }
+        }
+
+        if ($request->input('work_experience')[0]) {
+            foreach ($request->input('work_experience') as $experience)
+            {
+                $resume->workExperience()->create($experience);
+            }
+        }
+
+        $resume->address()->create($request->input('address'));
     }
 
-    public function edit(Request $request)
+    public function edit(StoreResumeRequest $request): void
     {
-        $resume = Resume::findOrFail($request->id);
-        $resume->touch();
-
-        Person::updateOrCreate(['resume_id' => $request->id], $request->input('person'));
-        Education::updateOrCreate(['resume_id' => $request->id], $request->input('education'));
-        WorkExperience::updateOrCreate(['resume_id' => $request->id], $request->input('work_experience'));
-        Address::updateOrCreate(['resume_id' => $request->id], $request->input('address'));
+        $this->editResumeService->execute($request);
     }
 
     public function show(int $id): ResumeResource

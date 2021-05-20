@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Resume::factory(20)
+        Resume::factory(5)
             ->has(Person::factory())
             ->has(Education::factory(2))
             ->has(WorkExperience::factory(2))

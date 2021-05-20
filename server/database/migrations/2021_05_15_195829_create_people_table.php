@@ -19,7 +19,7 @@ class CreatePeopleTable extends Migration
             $table->string('name');
             $table->string('phone_number');
             $table->string('email');
-            $table->string('links');
+            $table->string('links')->nullable();
             $table->timestamps();
         });
     }

@@ -18,11 +18,11 @@ class CreateWorkExperiencesTable extends Migration
             $table->foreignId('resume_id');
             $table->string('title');
             $table->string('company');
-            $table->string('location');
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
-            $table->string('employment_schedule');
-            $table->text('description');
+            $table->string('location')->nullable();
+            $table->string('start_date');
+            $table->string('end_date')->nullable();
+            $table->string('employment_schedule')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

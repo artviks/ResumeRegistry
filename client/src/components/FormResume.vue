@@ -5,9 +5,9 @@
       <v-card flat max-width="60rem" class="mx-auto grey lighten-2">
         <div class="text-h6 pl-5">Personal info</div>
         <v-card  flat tile class="ma-5 pa-5">
-          <v-text-field label="Full name" v-model="resume.person.name"></v-text-field>
-          <v-text-field label="Phone" v-model="resume.person.phone_number"></v-text-field>
-          <v-text-field label="Email" v-model="resume.person.email"></v-text-field>
+          <v-text-field label="Full name" :rules="rules" v-model="resume.person.name"></v-text-field>
+          <v-text-field label="Phone" :rules="rules" v-model="resume.person.phone_number"></v-text-field>
+          <v-text-field label="Email" :rules="rules" v-model="resume.person.email"></v-text-field>
           <v-text-field label="Link" v-model="resume.person.links"></v-text-field>
         </v-card>
       </v-card>
@@ -39,13 +39,13 @@
               <v-icon>mdi-text-box-remove-outline</v-icon>
             </v-btn>
           </div>
-          <v-text-field label="School" v-model="education.school"></v-text-field>
+          <v-text-field label="School" :rules="rules" v-model="education.school"></v-text-field>
           <v-text-field label="Faculty" v-model="education.faculty"></v-text-field>
-          <v-text-field label="Field of study" v-model="education.field_of_study"></v-text-field>
-          <v-text-field label="Degree" v-model="education.degree"></v-text-field>
+          <v-text-field label="Field of study" :rules="rules" v-model="education.field_of_study"></v-text-field>
+          <v-text-field label="Degree" :rules="rules" v-model="education.degree"></v-text-field>
           <v-row>
             <v-col>
-              <v-text-field label="Start Year" v-model="education.start_year"></v-text-field>
+              <v-text-field label="Start Year" :rules="rules" v-model="education.start_year"></v-text-field>
             </v-col>
             <v-col>
               <v-text-field label="End Year" v-model="education.end_year"></v-text-field>
@@ -101,9 +101,9 @@
       <v-card flat max-width="60rem" class="mx-auto grey lighten-2">
         <div class="text-h6 pl-5">Address</div>
         <v-card  flat tile class="ma-5 pa-5">
-          <v-text-field label="Address" v-model="resume.address.address"></v-text-field>
-          <v-text-field label="Country" v-model="resume.address.country"></v-text-field>
-          <v-text-field label="Postal Code" v-model="resume.address.postal_code"></v-text-field>
+          <v-text-field label="Address" :rules="rules" v-model="resume.address.address"></v-text-field>
+          <v-text-field label="Country" :rules="rules" v-model="resume.address.country"></v-text-field>
+          <v-text-field label="Postal Code" :rules="rules" v-model="resume.address.postal_code"></v-text-field>
         </v-card>
         <div class="text-right">
           <v-btn color="primary" class="mr-5" type="submit">Save</v-btn>
@@ -125,7 +125,10 @@ export default {
 
   data() {
     return {
-      resume: {}
+      resume: {},
+      rules: [
+        value => !!value || 'Required.'
+      ]
     }
   },
 

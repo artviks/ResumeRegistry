@@ -25,11 +25,11 @@
         </v-flex>
         <v-flex xs6 md3>
           <div class="overline">Education</div>
-          <div class="body-2">{{ resume.education[resume.education.length - 1].school }}</div>
+          <div class="body-2" v-if="resume.education.length !== 0">{{ resume.education[resume.education.length - 1].school }}</div>
         </v-flex>
         <v-flex xs6 md3>
           <div class="overline">Work Experience</div>
-          <div class="body-2">{{ resume.work_experience[resume.work_experience.length - 1].title }}</div>
+          <div class="body-2" v-if="resume.work_experience.length !== 0">{{ resume.work_experience[resume.work_experience.length - 1].title }}</div>
         </v-flex>
         <v-flex xs6 md3 class="d-flex align-self-center justify-space-around">
           <v-btn
