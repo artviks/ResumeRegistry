@@ -10,47 +10,34 @@ use App\Models\Person;
 use App\Models\Resume;
 use App\Models\WorkExperience;
 use App\Services\EditResumeService;
+use App\Services\StoreResumeService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ResumeController extends Controller
 {
     private EditResumeService $editResumeService;
+    private StoreResumeService $storeResumeService;
 
-    public function __construct(EditResumeService $editResumeService)
+    public function __construct(
+        EditResumeService $editResumeService,
+        StoreResumeService $storeResumeService
+    )
     {
         $this->editResumeService = $editResumeService;
+        $this->storeResumeService = $storeResumeService;
     }
 
     public function index(): AnonymousResourceCollection
     {
-        $resume = Resume::orderBy('updated_at', 'desc')
-            ->paginate(10);
-
-        return ResumeResource::collection($resume);
+        return ResumeResource::collection(
+            Resume::orderBy('updated_at', 'desc')
+            ->paginate(10)
+        );
     }
 
     public function store(StoreResumeRequest $request): void
     {
-        $resume = new Resume();
-        $resume->save();
-
-        $resume->person()->create($request->input('person'));
-
-        if ($request->input('education')[0]) {
-            foreach ($request->input('education') as $education)
-            {
-                $resume->education()->create($education);
-            }
-        }
-
-        if ($request->input('work_experience')[0]) {
-            foreach ($request->input('work_experience') as $experience)
-            {
-                $resume->workExperience()->create($experience);
-            }
-        }
-
-        $resume->address()->create($request->input('address'));
+        $this->storeResumeService->execute($request);
     }
 
     public function edit(StoreResumeRequest $request): void
@@ -60,12 +47,12 @@ class ResumeController extends Controller
 
     public function show(int $id): ResumeResource
     {
-        $resume = Resume::findOrFail($id);
-
-        return new ResumeResource($resume);
+        return new ResumeResource(
+            Resume::findOrFail($id)
+        );
     }
 
-    public function destroy($id): void
+    public function destroy(int $id): void
     {
         Resume::destroy($id);
         Person::destroy(['resume_id'=>$id]);

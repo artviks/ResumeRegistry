@@ -28,7 +28,7 @@ class EditResumeService
             'links' => $request->input('person.links'),
         ]);
 
-        $this->deleteEdu($request, $resume->id);
+        $this->delete($request, $resume->id, 'education', Education::class);
 
         foreach ($request->input('education') as $education)
         {
@@ -46,7 +46,7 @@ class EditResumeService
             ]);
         }
 
-        $this->deleteExp($request, $resume->id);
+        $this->delete($request, $resume->id, 'work_experience', WorkExperience::class);
 
         foreach ($request->input('work_experience') as $experience)
         {
@@ -76,33 +76,18 @@ class EditResumeService
         $resume->touch();
     }
 
-    private function deleteEdu(StoreResumeRequest $request, int $resumeId): void
+    private function delete(StoreResumeRequest $request, int $resumeId, string $prop, string $class): void
     {
-        $dbEdu = DB::table('education')->where('resume_id', '=', $resumeId)->pluck('id');
+        $dbEdu = $class::where('resume_id', '=', $resumeId)->pluck('id');
 
         $requestedEdu = [];
-        foreach ($request->input('education') as $education) {
+        foreach ($request->input($prop) as $education) {
             $requestedEdu[] = $education['id'];
         }
 
         $deleteId = array_diff($dbEdu->toArray(), $requestedEdu);
         foreach ($deleteId as $id) {
-            Education::destroy($id);
-        }
-    }
-
-    private function deleteExp(StoreResumeRequest $request, int $resumeId): void
-    {
-        $dbEdu = DB::table('work_experiences')->where('resume_id', '=', $resumeId)->pluck('id');
-
-        $requestedEdu = [];
-        foreach ($request->input('work_experience') as $education) {
-            $requestedEdu[] = $education['id'];
-        }
-
-        $deleteId = array_diff($dbEdu->toArray(), $requestedEdu);
-        foreach ($deleteId as $id) {
-            WorkExperience::destroy($id);
+            $class::destroy($id);
         }
     }
 }
